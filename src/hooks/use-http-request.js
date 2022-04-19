@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useHttpRequest = (requestConfig, applyData) => {
 
@@ -11,9 +11,9 @@ const useHttpRequest = (requestConfig, applyData) => {
     try {
       const response = await fetch(
         requestConfig.url, {
-          method: requestConfig.method,
-          headers: requestConfig.headers,
-          body: JSON.stringify(requestConfig.body)
+          method: requestConfig ? requestConfig.method : 'GET',
+          headers: requestConfig.headers ? requestConfig.headers: {},
+          body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
         }
         //instead of writing hardcoded url to make the hook more flexible.
       );
@@ -28,14 +28,6 @@ const useHttpRequest = (requestConfig, applyData) => {
       setError(err.message || 'Something went wrong!');
     }
     setIsLoading(false);
-  };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const taskAddHandler = (task) => {
-    setTasks((prevTasks) => prevTasks.concat(task));
   };
   return{
     // isLoading: isLoading,
