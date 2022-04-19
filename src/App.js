@@ -8,20 +8,20 @@ function App() {
 
   const [tasks, setTasks] = useState([]);
 
-  const transformTask = taskObj => {
-    const loadedTasks = [];
-
-    for (const taskKey in taskObj) {
-      loadedTasks.push({ id: taskKey, text: taskObj[taskKey].text });
-    }
-    setTasks(loadedTasks);
-  };
-
-  const { isLoading, error, sendRequest: fetchTasks } = useHttpRequest({ url: 'https://react-http-requests-aa439-default-rtdb.firebaseio.com/tasks.json' }, transformTask);
+  const { isLoading, error, sendRequest: fetchTasks } = useHttpRequest();
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+
+    const transformTask = (taskObj) => {
+      const loadedTasks = [];
+
+      for (const taskKey in taskObj) {
+        loadedTasks.push({ id: taskKey, text: taskObj[taskKey].text });
+      }
+      setTasks(loadedTasks);
+    };
+    fetchTasks({ url: 'https://react-http-requests-aa439-default-rtdb.firebaseio.com/tasks.json' },transformTask);
+  }, [fetchTasks]);
 
   const taskAddHandler = (task) => {
     setTasks((prevTasks) => prevTasks.concat(task));
